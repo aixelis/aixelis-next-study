@@ -1,0 +1,4 @@
+[[d1_databases]]
+binding = "DB" # 在代码里调用的名字
+database_name = "aixelis_db"
+database_id = "ce1e0be9-a7c1-48bc-ba2e-2a1065ae5004"
