@@ -1,4 +1,4 @@
-import LoginForm from './components/LoginForm'; // 确保你有这个组件，或者直接把登录代码写在这
+import LoginForm from './components/LoginForm'; 
 
 export default function Home() {
   return (
