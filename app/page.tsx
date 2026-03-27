@@ -1,86 +1,56 @@
-'use client';
-
-import { useState } from 'react';
+import LoginForm from './components/LoginForm'; // 确保你有这个组件，或者直接把登录代码写在这
 
 export default function Home() {
-  const [isLogin, setIsLogin] = useState(true);
-  // 新增：用于存储用户输入的文字
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-
-  const handleAuth = async () => {
-    setMessage('正在处理...');
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      });
-      const data = await res.json();
-      
-      setMessage(data.success ? `✅ ${data.message}` : `❌ ${data.message}`);
-    } catch (e) {
-      setMessage('❌ 网络请求失败');
-    }
-  };
-
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-50 text-black">
-      <div className="z-10 w-full max-w-md p-8 bg-white rounded-xl shadow-lg text-center border border-gray-100">
-        <h1 className="text-3xl font-bold text-blue-600 mb-6">
-          {isLogin ? 'AIXELIS 会员登录' : 'AIXELIS 会员注册'}
-        </h1>
-        
-        <div className="space-y-4 text-left">
-          <div>
-            <label className="text-sm font-medium text-gray-700">用户名</label>
-            <input 
-              type="text" 
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="请输入用户名" 
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none mt-1"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-700">密码</label>
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="请输入密码" 
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none mt-1"
-            />
-          </div>
-          
-          <button 
-            onClick={handleAuth}
-            className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition shadow-md active:scale-95"
-          >
-            {isLogin ? '立即登录' : '立即注册'}
-          </button>
+    <main className="min-h-screen bg-gray-50">
+      {/* 1. 导航栏 */}
+      <nav className="p-4 bg-white shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div className="text-2xl font-black text-blue-700 tracking-tighter">AIXELIS</div>
+        <a href="tel:626-252-4457" className="bg-red-500 text-white px-4 py-2 rounded-full animate-pulse font-bold">
+          📞 626-252-4457
+        </a>
+      </nav>
+
+      {/* 2. 老网页的 Hero 海报区 */}
+      <section className="bg-gradient-to-r from-slate-900 to-slate-800 text-white py-20 px-6 text-center">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-4">专业 HVAC & 电力服务</h2>
+        <p className="text-xl text-gray-300 mb-8">洛杉矶资深团队 | 暖通空调 • 电工 • 管道工程</p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <button className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-lg font-bold transition">立即预约</button>
+          <button className="border border-white hover:bg-white hover:text-slate-900 px-8 py-3 rounded-lg font-bold transition">了解更多</button>
         </div>
+      </section>
 
-        {message && (
-          <p className={`mt-4 text-sm font-medium ${message.includes('✅') ? 'text-green-600' : 'text-red-500'}`}>
-            {message}
-          </p>
-        )}
+      {/* 3. 老网页的服务板块 */}
+      <section className="max-w-6xl mx-auto py-16 px-6 grid md:grid-cols-3 gap-8">
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+          <div className="text-4xl mb-4">❄️</div>
+          <h3 className="text-xl font-bold mb-2">暖通空调 (HVAC)</h3>
+          <p className="text-gray-600">空调安装、热泵维修、通风系统清洁，确保您的家庭四季如春。</p>
+        </div>
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+          <div className="text-4xl mb-4">⚡</div>
+          <h3 className="text-xl font-bold mb-2">电力服务</h3>
+          <p className="text-gray-600">电路升级、面板维修、照明安装。持证电工，安全第一。</p>
+        </div>
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+          <div className="text-4xl mb-4">🔧</div>
+          <h3 className="text-xl font-bold mb-2">管道工程</h3>
+          <p className="text-gray-600">漏水修复、热水器更换、下水道疏通。快速上门，彻底解决问题。</p>
+        </div>
+      </section>
 
-        <p className="mt-6 text-sm text-gray-500 border-t pt-4">
-          {isLogin ? '还没有账号？' : '已有账号？'}{' '}
-          <button 
-            onClick={() => {
-              setIsLogin(!isLogin);
-              setMessage('');
-            }}
-            className="text-blue-600 font-bold hover:underline"
-          >
-            {isLogin ? '立即注册' : '立即登录'}
-          </button>
-        </p>
-      </div>
+      {/* 4. 你的会员登录区 (连接 D1 数据库) */}
+      <section className="bg-blue-600 py-20 px-6">
+        <div className="max-w-md mx-auto bg-white rounded-3xl p-10 shadow-2xl">
+          <h2 className="text-3xl font-black text-center text-gray-800 mb-8">会员中心</h2>
+          <LoginForm /> 
+        </div>
+      </section>
+
+      <footer className="py-10 text-center text-gray-400 text-sm">
+        © 2026 AIXELIS Home Services. All Rights Reserved.
+      </footer>
     </main>
   );
 }
