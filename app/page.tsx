@@ -1,6 +1,29 @@
-import LoginForm from './components/LoginForm'; 
+'use client';
+
+import { useState } from 'react';
 
 export default function Home() {
+  // === 登录逻辑部分 ===
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (data.success) {
+      setMessage('✅ 登录成功');
+    } else {
+      setMessage('❌ 登录失败: ' + data.error);
+    }
+  };
+
+  // === 页面渲染部分 ===
   return (
     <main className="min-h-screen bg-gray-50">
       {/* 1. 导航栏 */}
@@ -40,11 +63,40 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. 你的会员登录区 (连接 D1 数据库) */}
+      {/* 4. 会员登录区 (自带逻辑) */}
       <section className="bg-blue-600 py-20 px-6">
         <div className="max-w-md mx-auto bg-white rounded-3xl p-10 shadow-2xl">
-          <h2 className="text-3xl font-black text-center text-gray-800 mb-8">会员中心</h2>
-          <LoginForm /> 
+          <h2 className="text-2xl font-black text-center text-gray-800 mb-6">AIXELIS 会员登录</h2>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-1">用户名</label>
+              <input 
+                type="text" 
+                value={username} 
+                onChange={e => setUsername(e.target.value)} 
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                placeholder="请输入用户名" 
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-1">密码</label>
+              <input 
+                type="password" 
+                value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                placeholder="请输入密码" 
+              />
+            </div>
+            <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">
+              立即登录
+            </button>
+          </form>
+          {message && (
+            <div className={`mt-4 p-3 rounded text-center font-bold ${message.includes('成功') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              {message}
+            </div>
+          )}
         </div>
       </section>
 
