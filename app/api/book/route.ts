@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
 
+export const runtime = 'edge';
+import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   try {
     // 1. 接收前端传来的表单数据
