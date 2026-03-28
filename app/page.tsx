@@ -32,6 +32,9 @@ const translations = {
     serviceLabel: '需要什麼服務？',
     serviceOptions: ['暖通空調 (HVAC)', '電力維修', '管道工程', '其他綜合服務'],
     dateLabel: '期望日期',
+    // --- 新增的欄位翻譯 ---
+    descLabel: '簡述您的問題',
+    descPlaceholder: '請簡單描述您遇到的情況...',
     cancelBtn: '取消',
     submitBtn: '確認送出',
     bookSuccess: '✅ 預約已送出！我們將盡快與您聯絡。'
@@ -64,6 +67,9 @@ const translations = {
     serviceLabel: 'Service Needed?',
     serviceOptions: ['HVAC', 'Electrical', 'Plumbing', 'Other'],
     dateLabel: 'Preferred Date',
+    // --- 新增的欄位翻譯 ---
+    descLabel: 'Brief Description',
+    descPlaceholder: 'Please briefly describe your issue...',
     cancelBtn: 'Cancel',
     submitBtn: 'Submit Request',
     bookSuccess: '✅ Request submitted! We will contact you soon.'
@@ -182,7 +188,7 @@ export default function Home() {
         {t.footer}
       </footer>
 
-      {/* 5. 预约表单弹窗 (Modal) */}
+      {/* 5. 預約表單彈窗 (Modal) */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 px-4 backdrop-blur-sm">
           <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg transform transition-all relative">
@@ -213,6 +219,16 @@ export default function Home() {
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">{t.dateLabel}</label>
                   <input type="date" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                </div>
+                
+                {/* 這是新增加的留言框 (Textarea) */}
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">{t.descLabel}</label>
+                  <textarea 
+                    rows={3} 
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none" 
+                    placeholder={t.descPlaceholder}
+                  ></textarea>
                 </div>
                 
                 <div className="flex gap-4 mt-6">
