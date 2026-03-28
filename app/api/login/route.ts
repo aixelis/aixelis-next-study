@@ -5,7 +5,7 @@ export const runtime = 'edge';
 export async function POST(request: NextRequest) {
   try {
     const { username, password } = await request.json();
-    const db = process.env.DB as unknown as D1Database;
+    const db = process.env.DB as any;
 
     // 查询用户
     const user = await db.prepare("SELECT * FROM users WHERE username = ? AND password = ?")
