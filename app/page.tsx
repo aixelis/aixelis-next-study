@@ -25,7 +25,16 @@ const translations = {
     loginBtn: '立即登入',
     loginSuccess: '✅ 登入成功',
     loginFail: '❌ 登入失敗: ',
-    footer: '© 2026 AIXELIS Home Services. 保留所有權利。'
+    footer: '© 2026 AIXELIS Home Services. 保留所有權利。',
+    modalTitle: '預約服務',
+    nameLabel: '您的姓名',
+    phoneLabel: '聯絡電話',
+    serviceLabel: '需要什麼服務？',
+    serviceOptions: ['暖通空調 (HVAC)', '電力維修', '管道工程', '其他綜合服務'],
+    dateLabel: '期望日期',
+    cancelBtn: '取消',
+    submitBtn: '確認送出',
+    bookSuccess: '✅ 預約已送出！我們將盡快與您聯絡。'
   },
   'en': {
     navCall: '📞 626-252-4457',
@@ -48,16 +57,23 @@ const translations = {
     loginBtn: 'Login',
     loginSuccess: '✅ Login Successful',
     loginFail: '❌ Login Failed: ',
-    footer: '© 2026 AIXELIS Home Services. All Rights Reserved.'
+    footer: '© 2026 AIXELIS Home Services. All Rights Reserved.',
+    modalTitle: 'Book a Service',
+    nameLabel: 'Your Name',
+    phoneLabel: 'Phone Number',
+    serviceLabel: 'Service Needed?',
+    serviceOptions: ['HVAC', 'Electrical', 'Plumbing', 'Other'],
+    dateLabel: 'Preferred Date',
+    cancelBtn: 'Cancel',
+    submitBtn: 'Submit Request',
+    bookSuccess: '✅ Request submitted! We will contact you soon.'
   }
 };
 
 export default function Home() {
-  // === 語言切換邏輯 ===
   const [lang, setLang] = useState<'zh-TW' | 'en'>('zh-TW');
-  const t = translations[lang]; // 根據當前語言獲取對應的文本
+  const t = translations[lang];
 
-  // === 登入邏輯部分 ===
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -77,79 +93,78 @@ export default function Home() {
     }
   };
 
-  // === 頁面渲染部分 ===
+  const [showModal, setShowModal] = useState(false);
+  const [bookMessage, setBookMessage] = useState('');
+
+  const handleBookingSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setBookMessage(t.bookSuccess);
+    setTimeout(() => {
+      setShowModal(false);
+      setBookMessage('');
+    }, 2500); 
+  };
+
   return (
-    <main className="min-h-screen bg-gray-50 font-sans">
-      {/* 1. 導航欄 (加入語言切換按鈕) */}
-      <nav className="p-4 bg-white shadow-sm flex justify-between items-center sticky top-0 z-50">
+    <main className="min-h-screen bg-gray-50 font-sans relative">
+      <nav className="p-4 bg-white shadow-sm flex justify-between items-center sticky top-0 z-40">
         <div className="text-2xl font-black text-blue-700 tracking-tighter">AIXELIS</div>
         <div className="flex gap-3 items-center">
-          {/* 語言切換按鈕 */}
           <button 
             onClick={() => setLang(lang === 'zh-TW' ? 'en' : 'zh-TW')}
             className="text-sm font-bold text-gray-600 border-2 border-gray-200 px-3 py-1 rounded-full hover:bg-gray-100 transition"
           >
             🌐 {t.langBtn}
           </button>
-          <a href="tel:626-252-4457" className="bg-red-500 text-white px-4 py-2 rounded-full animate-pulse font-bold text-sm md:text-base">
+          <a href="tel:626-252-4457" className="bg-red-500 text-white px-4 py-2 rounded-full animate-pulse font-bold text-sm md:text-base hidden sm:block">
             {t.navCall}
           </a>
         </div>
       </nav>
 
-      {/* 2. 海報區 */}
       <section className="bg-gradient-to-r from-slate-900 to-slate-800 text-white py-20 px-6 text-center">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-4">{t.heroTitle}</h2>
         <p className="text-xl text-gray-300 mb-8">{t.heroSub}</p>
         <div className="flex flex-wrap justify-center gap-4">
-          <button className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-lg font-bold transition">{t.bookBtn}</button>
+          <button 
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-lg font-bold transition shadow-lg"
+          >
+            {t.bookBtn}
+          </button>
           <button className="border border-white hover:bg-white hover:text-slate-900 px-8 py-3 rounded-lg font-bold transition">{t.learnBtn}</button>
         </div>
       </section>
 
-      {/* 3. 服務板塊 */}
       <section className="max-w-6xl mx-auto py-16 px-6 grid md:grid-cols-3 gap-8">
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
           <div className="text-4xl mb-4">❄️</div>
           <h3 className="text-xl font-bold mb-2">{t.hvacTitle}</h3>
           <p className="text-gray-600">{t.hvacDesc}</p>
         </div>
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
           <div className="text-4xl mb-4">⚡</div>
           <h3 className="text-xl font-bold mb-2">{t.elecTitle}</h3>
           <p className="text-gray-600">{t.elecDesc}</p>
         </div>
-        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
           <div className="text-4xl mb-4">🔧</div>
           <h3 className="text-xl font-bold mb-2">{t.plumbTitle}</h3>
           <p className="text-gray-600">{t.plumbDesc}</p>
         </div>
       </section>
 
-      {/* 4. 會員登入區 */}
       <section className="bg-blue-600 py-20 px-6">
         <div className="max-w-md mx-auto bg-white rounded-3xl p-10 shadow-2xl">
           <h2 className="text-2xl font-black text-center text-gray-800 mb-6">{t.loginTitle}</h2>
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-1">{t.userLabel}</label>
-              <input 
-                type="text" 
-                value={username} 
-                onChange={e => setUsername(e.target.value)} 
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                placeholder={t.userPlaceholder} 
-              />
+              <input type="text" value={username} onChange={e => setUsername(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder={t.userPlaceholder} />
             </div>
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-1">{t.passLabel}</label>
-              <input 
-                type="password" 
-                value={password} 
-                onChange={e => setPassword(e.target.value)} 
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                placeholder={t.passPlaceholder} 
-              />
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder={t.passPlaceholder} />
             </div>
             <button type="submit" className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition">
               {t.loginBtn}
@@ -166,6 +181,53 @@ export default function Home() {
       <footer className="py-10 text-center text-gray-400 text-sm">
         {t.footer}
       </footer>
+
+      {/* 5. 预约表单弹窗 (Modal) */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50 px-4 backdrop-blur-sm">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg transform transition-all relative">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">{t.modalTitle}</h2>
+            
+            {bookMessage ? (
+              <div className="bg-green-100 text-green-700 p-6 rounded-xl text-center font-bold text-lg">
+                {bookMessage}
+              </div>
+            ) : (
+              <form onSubmit={handleBookingSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">{t.nameLabel}</label>
+                    <input type="text" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">{t.phoneLabel}</label>
+                    <input type="tel" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">{t.serviceLabel}</label>
+                  <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    {t.serviceOptions.map((opt, i) => <option key={i}>{opt}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-1">{t.dateLabel}</label>
+                  <input type="date" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+                </div>
+                
+                <div className="flex gap-4 mt-6">
+                  <button type="button" onClick={() => setShowModal(false)} className="w-1/3 bg-gray-100 text-gray-700 font-bold py-3 rounded-lg hover:bg-gray-200 transition">
+                    {t.cancelBtn}
+                  </button>
+                  <button type="submit" className="w-2/3 bg-orange-500 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition shadow-md">
+                    {t.submitBtn}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
